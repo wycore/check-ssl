@@ -5,12 +5,12 @@ import (
 	"flag"
 	"fmt"
 	log "github.com/Sirupsen/logrus"
+	"math"
 	"net"
 	"os"
 	"runtime/debug"
 	"syscall"
 	"time"
-	"math"
 )
 
 const (
@@ -42,8 +42,8 @@ func main() {
 	var ips []net.IP
 
 	flag.StringVar(&host, "host", "", "the domain name of the host to check")
-	flag.DurationVar(&lookupTimeout, "lookup-timeout", 10 * time.Second, "timeout for DNS lookups - see: https://golang.org/pkg/time/#ParseDuration")
-	flag.DurationVar(&connectionTimeout, "connection-timeout", 30 * time.Second, "timeout connection - see: https://golang.org/pkg/time/#ParseDuration")
+	flag.DurationVar(&lookupTimeout, "lookup-timeout", 10*time.Second, "timeout for DNS lookups - see: https://golang.org/pkg/time/#ParseDuration")
+	flag.DurationVar(&connectionTimeout, "connection-timeout", 30*time.Second, "timeout connection - see: https://golang.org/pkg/time/#ParseDuration")
 	flag.UintVar(&warningFlag, "w", 30, "warning validity in days")
 	flag.UintVar(&criticalFlag, "c", 14, "critical validity in days")
 	flag.BoolVar(&printVersion, "V", false, "print version and exit")
@@ -72,7 +72,7 @@ func main() {
 	log.Debugf("lookup result: %v", ips)
 
 	for _, ip := range ips {
-		dialer := net.Dialer{Timeout: connectionTimeout, Deadline: time.Now().Add(connectionTimeout + 5 * time.Second)}
+		dialer := net.Dialer{Timeout: connectionTimeout, Deadline: time.Now().Add(connectionTimeout + 5*time.Second)}
 		connection, err := tls.DialWithDialer(&dialer, "tcp", fmt.Sprintf("[%s]:443", ip), &tls.Config{ServerName: host})
 		if err != nil {
 			// catch missing ipv6 connectivity
@@ -113,7 +113,7 @@ func main() {
 				} else if remainingValidity < warningValidity {
 					updateExitCode(Warning)
 				}
-				log.Infof("%-15s - %s valid until %s (%s)", ip, cert.Subject.CommonName, cert.NotAfter, formarDuration(remainingValidity))
+				log.Infof("%-15s - %s valid until %s (%s)", ip, cert.Subject.CommonName, cert.NotAfter, formatDuration(remainingValidity))
 			}
 		}
 		connection.Close()
@@ -150,7 +150,7 @@ func catchPanic() {
 	}
 }
 
-func formarDuration (in time.Duration) string {
+func formatDuration(in time.Duration) string {
 	var daysPart, hoursPart, minutesPart, secondsPart string
 
 	days := math.Floor(in.Hours() / 24)
@@ -178,7 +178,6 @@ func formarDuration (in time.Duration) string {
 	if secondsRemaining > 0 {
 		secondsPart = fmt.Sprintf("%.fs", secondsRemaining)
 	}
-
 
 	return fmt.Sprintf("%s %s %s %s", daysPart, hoursPart, minutesPart, secondsPart)
 }
