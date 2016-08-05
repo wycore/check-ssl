@@ -50,6 +50,7 @@ func main() {
 	flag.Parse()
 
 	log.SetLevel(log.InfoLevel)
+	log.SetFormatter(&SimpleTextFormatter{DisableTimestamp: true})
 	if printVersion {
 		log.Infof("Version: %s", version)
 		os.Exit(0)
