@@ -23,6 +23,8 @@ const (
 var exitCode int = OK
 var lookupTimeout, connectionTimeout, warningValidity, criticalValidity time.Duration
 var warningFlag, criticalFlag uint
+var version string
+var printVersion bool
 
 func updateExitCode(newCode int) (changed bool) {
 	if newCode > exitCode {
@@ -44,9 +46,15 @@ func main() {
 	flag.DurationVar(&connectionTimeout, "connection-timeout", 30 * time.Second, "timeout connection - see: https://golang.org/pkg/time/#ParseDuration")
 	flag.UintVar(&warningFlag, "w", 30, "warning validity in days")
 	flag.UintVar(&criticalFlag, "c", 14, "critical validity in days")
+	flag.BoolVar(&printVersion, "V", false, "print version and exit")
 	flag.Parse()
 
 	log.SetLevel(log.InfoLevel)
+	if printVersion {
+		log.Infof("Version: %s", version)
+		os.Exit(0)
+	}
+
 	if host == "" {
 		flag.Usage()
 		log.Error("-host is required")
