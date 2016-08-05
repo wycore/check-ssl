@@ -1,0 +1,4 @@
+package: github.com/wywygmbh/check-ssl
+import:
+- package: github.com/Sirupsen/logrus
+  version: ^v0.9.0
