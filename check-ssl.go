@@ -107,13 +107,18 @@ func main() {
 					log.Debugf("%-15s - ignoring CA certificate %s", ip, cert.Subject.CommonName)
 					continue
 				}
+
+				var certificateStatus int
 				remainingValidity := cert.NotAfter.Sub(time.Now())
 				if remainingValidity < criticalValidity {
-					updateExitCode(Critical)
+					certificateStatus = Critical
 				} else if remainingValidity < warningValidity {
-					updateExitCode(Warning)
+					certificateStatus = Warning
+				} else {
+					certificateStatus = OK
 				}
-				log.Infof("%-15s - %s valid until %s (%s)", ip, cert.Subject.CommonName, cert.NotAfter, formatDuration(remainingValidity))
+				updateExitCode(certificateStatus)
+				logWithSeverity(certificateStatus, "%-15s - %s valid until %s (%s)", ip, cert.Subject.CommonName, cert.NotAfter, formatDuration(remainingValidity))
 			}
 		}
 		connection.Close()
@@ -180,4 +185,17 @@ func formatDuration(in time.Duration) string {
 	}
 
 	return fmt.Sprintf("%s %s %s %s", daysPart, hoursPart, minutesPart, secondsPart)
+}
+
+func logWithSeverity(severity int, format string, args ...interface{}) {
+	switch severity {
+	case OK:
+		log.Infof(format, args...)
+	case Warning:
+		log.Warnf(format, args...)
+	case Critical:
+		log.Errorf(format, args...)
+	default:
+		log.Panicf("Invalid severity %d", severity)
+	}
 }
