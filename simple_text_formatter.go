@@ -1,4 +1,12 @@
+// Copyright (c) 2014 Simon Eskildsen
+//
+// This software may be modified and distributed under the terms
+// of the MIT license.  See the LICENSE-MIT file for details.
+//
+// This file is based on parts of logrus and was patched to allow better message formatting in non TTY cases.
+
 package main
+
 
 import (
 	"bytes"
