@@ -13,7 +13,7 @@ test: install_deps
 	GOPATH=$(GOPATH) $(GO) vet $(PACKAGES)
 
 fmt:
-	GOPATH=$(GOPATH) find . -name "*.go" | xargs gofmt -w
+	GOPATH=$(GOPATH) find . -name "*.go" | xargs gofmt -w -s
 
 install_deps: install_glide
 	GOPATH=$(GOPATH) $(GOPATH)/bin/glide install
