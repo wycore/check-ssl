@@ -1,6 +1,7 @@
 # check-ssl
 [![GitHub version](https://badge.fury.io/gh/wywygmbh%2Fcheck-ssl.svg)](https://badge.fury.io/gh/wywygmbh%2Fcheck-ssl)
 [![Build Status](https://travis-ci.org/wywygmbh/check-ssl.svg?branch=master)](https://travis-ci.org/wywygmbh/check-ssl)
+[![Go Report](https://goreportcard.com/badge/github.com/wywygmbh/check-ssl)](https://goreportcard.com/report/github.com/wywygmbh/check-ssl)
 
 
 Monitor SSL certificate validity for records with multiple IPs.
