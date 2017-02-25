@@ -20,3 +20,6 @@ install_deps: install_glide
 
 install_glide:
 	GOPATH=$(GOPATH) $(GO) get github.com/Masterminds/glide
+
+lint:
+	GOPATH=$(GOPATH) $(GOPATH)/bin/golint

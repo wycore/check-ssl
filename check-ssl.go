@@ -13,6 +13,7 @@ import (
 	"time"
 )
 
+// check exit codes
 const (
 	OK       = iota
 	Warning  = iota
@@ -20,7 +21,7 @@ const (
 	Unknown  = iota
 )
 
-var exitCode int = OK
+var exitCode = OK
 var lookupTimeout, connectionTimeout, warningValidity, criticalValidity time.Duration
 var warningFlag, criticalFlag uint
 var version string

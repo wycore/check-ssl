@@ -40,6 +40,7 @@ func miniTS() int {
 	return int(time.Since(baseTimestamp) / time.Second)
 }
 
+// SimpleTextFormatter is a modified formatter to produce nice check output without any control characters
 type SimpleTextFormatter struct {
 	// Set to true to bypass checking for a TTY before outputting colors.
 	ForceColors bool
@@ -64,8 +65,9 @@ type SimpleTextFormatter struct {
 	DisableSorting bool
 }
 
+// Format will actually format the message
 func (f *SimpleTextFormatter) Format(entry *logrus.Entry) ([]byte, error) {
-	var keys []string = make([]string, 0, len(entry.Data))
+	var keys = make([]string, 0, len(entry.Data))
 	for k := range entry.Data {
 		keys = append(keys, k)
 	}
